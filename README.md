@@ -2,7 +2,15 @@ The application is designed to provide a personalized and engaging educational e
 
 ## Getting Started
 
-First, run the development server:
+First, install all the dependencies using:
+
+```bash
+npm install
+```
+
+## Run the app
+
+Run the development server:
 
 ```bash
 npm run dev
