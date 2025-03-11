@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+The application is designed to provide a personalized and engaging educational experience. The application allows children to explore a wide range of activities, track their progress, and unlock rewards, fostering motivation and consistent learning. Parents can monitor their child’s achievements, set goals, and give feedback and suggestions, ensuring a balanced and focused approach. The application serves as a platform where kids can learn at their own pace, guided by intuitive features and interactive content, while parents and educators can gain insights to optimize the child’s learning experience.
 
 ## Getting Started
 
