@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int                  @id @default(autoincrement())
+  username         String               @unique
+  password         String
+  user             UserDetails?
+  progress         Progress[]            // One-to-many relationship with Progress
+  completedSubtopics CompletedSubtopic[] // Add relation to CompletedSubtopic
+}
+
+model UserDetails {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String
+  role     String
+  phone    String
+  userId   Int    @unique
+  user     User?  @relation(fields: [userId], references: [id])
+}
+
+model Progress {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  categoryId Int      // Foreign key for Category
+  progress   Int      @default(0) // Progress percentage (0-100)
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, categoryId]) // Ensures one progress entry per category per user
+}
+
+model Quiz {
+  id         Int        @id @default(autoincrement())
+  title      String
+  subject    String
+  difficulty String
+  duration   Int
+  questions  Question[]
+}
+
+model Question {
+  id      Int      @id @default(autoincrement())
+  quizId  Int
+  text    String
+  options String[]
+  answer  String
+  quiz    Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id       Int        @id @default(autoincrement())
+  name     String     @unique
+  topics   Topic[]
+  progress Progress[]
+}
+
+model Topic {
+  id         Int        @id @default(autoincrement())
+  name       String
+  categoryId Int
+  imageUrl   String
+  subtopics  Subtopic[]
+  category   Category   @relation(fields: [categoryId], references: [id])
+}
+
+model Subtopic {
+  id      Int     @id @default(autoincrement())
+  name    String
+  topicId Int
+  topic   Topic   @relation(fields: [topicId], references: [id])
+  videos  Video[]
+  completedSubtopics CompletedSubtopic[] // Add relation to CompletedSubtopic
+}
+
+model Video {
+  id         Int      @id @default(autoincrement())
+  name       String
+  url        String
+  subtopicId Int
+  subtopic   Subtopic @relation(fields: [subtopicId], references: [id])
+}
+
+model CompletedSubtopic {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  subtopicId Int
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subtopic  Subtopic @relation(fields: [subtopicId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, subtopicId]) // Prevent duplicate entries
+}
