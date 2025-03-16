@@ -75,6 +75,26 @@ async function main() {
                 }
               ]
             }
+          },
+          {
+            name: "Algebra",
+            imageUrl: "https://demmelearning.com/wp-content/uploads/2024/08/algebra-1-prep.jpg",
+            subtopics: {
+              create: [
+                {
+                  name: "Linear Equations",
+                  videos: {
+                    create: [{ name: "Linear Equations", url: "https://www.youtube.com/embed/tHm3X_Ta_iE" }]
+                  }
+                },
+                {
+                  name: "Linear Inequalities",
+                  videos: {
+                    create: [{ name: "Linear Inequalities", url: "https://www.youtube.com/embed/DrZJKdXlZ3I" }]
+                  }
+                }
+              ]
+            }
           }
         ]
       }
@@ -128,6 +148,26 @@ async function main() {
                 }
               ]
             }
+          },
+          {
+            name: "Chemistry",
+            imageUrl: "https://www.meritstore.in/wp-content/uploads/2016/12/10-reasons-to-love-Chemistry.png",
+            subtopics: {
+              create: [
+                {
+                  name: "Chemical Reactions",
+                  videos: {
+                    create: [{ name: "Chemical Reactions", url: "https://www.youtube.com/embed/Lvbm8horG1U" }]
+                  }
+                },
+                {
+                  name: "Organic Chemistry",
+                  videos: {
+                    create: [{ name: "Organic Chemistry", url: "https://www.youtube.com/embed/nP0gDV0xDLY" }]
+                  }
+                }
+              ]
+            }
           }
         ]
       }
@@ -177,6 +217,26 @@ async function main() {
                   name: "World War II",
                   videos: {
                     create: [{ name: "World War II", url: "https://www.youtube.com/embed/bAerID24QJ0" }]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            name: "Industrial Revolution",
+            imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Powerloom_weaving_in_1835.jpg/1200px-Powerloom_weaving_in_1835.jpg",
+            subtopics: {
+              create: [
+                {
+                  name: "Revolution in Metal Industry",
+                  videos: {
+                    create: [{ name: "Revolution in Metal Industry", url: "https://www.youtube.com/embed/zsPYi2KQ2a0" }]
+                  }
+                },
+                {
+                  name: "Revolution in Taxes",
+                  videos: {
+                    create: [{ name: "Revolution in Taxes", url: "https://www.youtube.com/embed/HlUiSBXQHCw" }]
                   }
                 }
               ]
