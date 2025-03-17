@@ -8,34 +8,39 @@ datasource db {
 }
 
 model User {
-  id                Int                  @id @default(autoincrement())
-  username         String               @unique
-  password         String
-  user             UserDetails?
-  progress         Progress[]            // One-to-many relationship with Progress
-  completedSubtopics CompletedSubtopic[] // Add relation to CompletedSubtopic
+  id                 Int                 @id @default(autoincrement())
+  username           String              @unique
+  password           String
+  role               String
+  user               UserDetails?
+  progress           Progress[]
+  completedSubtopics CompletedSubtopic[]
+  completedAssignments CompletedAssignment[] // New relation for completed assignments
+  teacher            Teacher?
+  parent             Parent?
+  child              Child?
+  streak             Streak?
 }
 
 model UserDetails {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String
-  role     String
-  phone    String
-  userId   Int    @unique
-  user     User?  @relation(fields: [userId], references: [id])
+  id     Int    @id @default(autoincrement())
+  name   String
+  email  String
+  role   String
+  phone  String
+  userId Int    @unique
+  user   User?  @relation(fields: [userId], references: [id])
 }
 
 model Progress {
-  id         Int      @id @default(autoincrement())
+  id         Int @id @default(autoincrement())
   userId     Int
-  categoryId Int      // Foreign key for Category
-  progress   Int      @default(0) // Progress percentage (0-100)
+  categoryId Int
 
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, categoryId]) // Ensures one progress entry per category per user
+  @@unique([userId, categoryId])
 }
 
 model Quiz {
@@ -45,6 +50,7 @@ model Quiz {
   difficulty String
   duration   Int
   questions  Question[]
+  scores     Score[]
 }
 
 model Question {
@@ -54,6 +60,15 @@ model Question {
   options String[]
   answer  String
   quiz    Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model Score {
+  id     Int    @id @default(autoincrement())
+  quizId Int
+  studentName String
+  score  Int
+
+  quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
 }
 
 model Category {
@@ -73,12 +88,12 @@ model Topic {
 }
 
 model Subtopic {
-  id      Int     @id @default(autoincrement())
-  name    String
-  topicId Int
-  topic   Topic   @relation(fields: [topicId], references: [id])
-  videos  Video[]
-  completedSubtopics CompletedSubtopic[] // Add relation to CompletedSubtopic
+  id                 Int                 @id @default(autoincrement())
+  name               String
+  topicId            Int
+  topic              Topic               @relation(fields: [topicId], references: [id])
+  videos             Video[]
+  completedSubtopics CompletedSubtopic[]
 }
 
 model Video {
@@ -90,11 +105,66 @@ model Video {
 }
 
 model CompletedSubtopic {
-  id        Int      @id @default(autoincrement())
-  userId    Int
+  id         Int      @id @default(autoincrement())
+  userId     Int
   subtopicId Int
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  subtopic  Subtopic @relation(fields: [subtopicId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subtopic   Subtopic @relation(fields: [subtopicId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, subtopicId]) // Prevent duplicate entries
+  @@unique([userId, subtopicId]) 
 }
+
+model Teacher {
+  id      Int    @id @default(autoincrement())
+  userId  Int    @unique
+  subject Int
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Parent {
+  id       Int     @id @default(autoincrement())
+  userId   Int     @unique
+  children Child[]
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Child {
+  id       Int    @id @default(autoincrement())
+  parentId Int
+  userId   Int    @unique
+  parent   Parent @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Assignment {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  openDate    DateTime
+  dueDate     DateTime
+  subject     String
+  completedAssignments CompletedAssignment[] // Relation to completed assignments
+}
+
+model CompletedAssignment {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  assignmentId  Int
+  fileUrl       String // Store the uploaded file URL
+  submissionDate DateTime @default(now())
+
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, assignmentId]) // Prevent duplicate submissions
+}
+
+model Streak {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @unique
+  currentStreak Int     @default(0)
+  lastActive   DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
