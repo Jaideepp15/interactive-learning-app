@@ -45,7 +45,6 @@ export async function POST(req: Request) {
             id: (userId * 3) - (3 - categoryId),
             userId: userId,
             categoryId: categoryId,
-            progress: 0, // Default progress value
           },
         });
       }
