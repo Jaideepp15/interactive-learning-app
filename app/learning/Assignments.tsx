@@ -126,6 +126,7 @@ export default function Assignments() {
                     <p className="text-base text-red-700 mt-1 font-medium">
                         Due: {new Date(selectedAssignment.dueDate).toISOString().split("T")[0]}
                     </p>
+                    <b className="text-base text-black-700 mt-2">SUBMIT .txt FILES ONLY</b>
 
                     {completedAssignments.some((c) => c.assignmentId === selectedAssignment.id) ? (
                         // Show uploaded file if the assignment is already completed
