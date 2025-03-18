@@ -31,11 +31,13 @@ function Login() {
       const { token, role } = await response.json();
       localStorage.setItem("token", token);
 
-      if (role === "student" || role === "parent") {
+      if (role === "student") {
         router.push("/learning");
       } else if (role === "teacher") {
         router.push("/teacher");
-      } else {
+      } else if ( role === "parent" ){
+        router.push("/parent");
+      }else {
         setError("Invalid role detected");
       }
     } catch (err) {
