@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { BarChart, LogOut, User, ClipboardList, FileQuestion, Video } from "lucide-react"; 
+import { BarChart, LogOut, User, ClipboardList, FileQuestion, Video, MessageSquare } from "lucide-react";
 import Analytics from "./analytics";
 import Students from "./students";
 import Assignments from "./assignments";
 import Quizzes from "./quizzes";
 import VideosPage from "./videos";
+import Feedback from "./feedback"; // Import Feedback component
 
 function Logo() {
   return (
@@ -40,7 +41,7 @@ export default function TeacherDashboard() {
         const response = await fetch("/api/fetch-teacher-details", {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, 
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
 
@@ -58,13 +59,14 @@ export default function TeacherDashboard() {
     fetchTeacherDetails();
   }, []);
 
-  // Define tabs with their respective icons
+  // Tabs including Feedback
   const tabs = [
     { id: "analytics", label: "Analytics", icon: <BarChart className="w-5 h-5" /> },
     { id: "students", label: "Students", icon: <User className="w-5 h-5" /> },
     { id: "assignments", label: "Assignments", icon: <ClipboardList className="w-5 h-5" /> },
     { id: "quizzes", label: "Quizzes", icon: <FileQuestion className="w-5 h-5" /> },
     { id: "videos", label: "Videos", icon: <Video className="w-5 h-5" /> },
+    { id: "feedback", label: "Feedback", icon: <MessageSquare className="w-5 h-5" /> }, // New Feedback Tab
   ];
 
   return (
@@ -118,6 +120,7 @@ export default function TeacherDashboard() {
             {activeTab === "assignments" && <Assignments />}
             {activeTab === "quizzes" && <Quizzes />}
             {activeTab === "videos" && <VideosPage />}
+            {activeTab === "feedback" && <Feedback />} {/* Feedback Tab */}
           </>
         ) : (
           <p className="text-center text-lg">Loading teacher details...</p>
