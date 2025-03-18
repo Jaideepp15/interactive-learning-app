@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { BarChart, LogOut, User } from "lucide-react";
+import { BarChart, LogOut, User, ClipboardList, FileQuestion, Video } from "lucide-react"; 
 import Analytics from "./analytics";
 import Students from "./students";
 import Assignments from "./assignments";
@@ -40,7 +40,7 @@ export default function TeacherDashboard() {
         const response = await fetch("/api/fetch-teacher-details", {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
+            Authorization: `Bearer ${localStorage.getItem("token")}`, 
           },
         });
 
@@ -58,22 +58,32 @@ export default function TeacherDashboard() {
     fetchTeacherDetails();
   }, []);
 
+  // Define tabs with their respective icons
+  const tabs = [
+    { id: "analytics", label: "Analytics", icon: <BarChart className="w-5 h-5" /> },
+    { id: "students", label: "Students", icon: <User className="w-5 h-5" /> },
+    { id: "assignments", label: "Assignments", icon: <ClipboardList className="w-5 h-5" /> },
+    { id: "quizzes", label: "Quizzes", icon: <FileQuestion className="w-5 h-5" /> },
+    { id: "videos", label: "Videos", icon: <Video className="w-5 h-5" /> },
+  ];
+
   return (
     <div className="min-h-screen bg-zinc-100 text-zinc-800">
       <nav className="flex justify-between items-center px-8 py-4 bg-white shadow-md">
         <Logo />
         <div className="flex gap-6">
-          {["analytics", "students", "assignments", "quizzes", "videos"].map((tab) => (
+          {tabs.map((tab) => (
             <button
-              key={tab}
-              className={`px-6 py-2 rounded-md text-sm font-semibold transition duration-300 shadow-md ${
-                activeTab === tab
+              key={tab.id}
+              className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-semibold transition duration-300 shadow-md ${
+                activeTab === tab.id
                   ? "bg-violet-600 text-white"
                   : "bg-zinc-200 text-zinc-700 hover:bg-violet-500 hover:text-white"
               }`}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => setActiveTab(tab.id)}
             >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {tab.icon}
+              {tab.label}
             </button>
           ))}
         </div>
