@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { PlayCircle, BookOpen, BarChart, LogOut, User, Gamepad2, ClipboardList, Flame } from "lucide-react";
+import { PlayCircle, BookOpen, BarChart, LogOut, User, Gamepad2, ClipboardList, Flame, MessageSquare } from "lucide-react";
 import VideoLessons from "./VideoLessons";
 import Quizzes from "./Quizzes";
 import Progress from "./Progress";
 import Games from "./game";
 import Assignments from "./Assignments";
+import FeedbackReader from "./feedback-reader"
 
 function Logo() {
   return (
@@ -71,7 +72,7 @@ export default function LearningPage() {
       <nav className="flex justify-between items-center px-8 py-4 bg-white shadow-md">
         <Logo />
         <div className="flex gap-6">
-          {["videos", "quizzes", "games", "progress", "assignments"].map((tab) => (
+          {["videos", "quizzes", "games", "progress", "assignments", "feedback"].map((tab) => (
             <button
               key={tab}
               className={`px-6 py-2 rounded-md text-sm font-semibold transition duration-300 shadow-md ${
@@ -86,6 +87,7 @@ export default function LearningPage() {
               {tab === "games" && <Gamepad2 className="mr-2 inline-block" />}
               {tab === "progress" && <BarChart className="mr-2 inline-block" />}
               {tab === "assignments" && <ClipboardList className="mr-2 inline-block" />}
+              {tab === "feedback" && <MessageSquare className="mr-2 inline-block" />}
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
           ))}
@@ -133,8 +135,9 @@ export default function LearningPage() {
         {activeTab === "videos" && <VideoLessons />}
         {activeTab === "quizzes" && <Quizzes />}
         {activeTab === "games" && <Games />}
-        {activeTab === "assignments" && <Assignments />}
         {activeTab === "progress" && <Progress />}
+        {activeTab === "assignments" && <Assignments />}
+        {activeTab === "feedback" && <FeedbackReader />}
       </div>
     </div>
   );
