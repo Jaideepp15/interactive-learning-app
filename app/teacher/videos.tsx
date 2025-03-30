@@ -82,7 +82,10 @@ export default function VideosPage() {
     };
     
     const handleAddTopic = async () => {
-        if (!newTopic.name || !newTopic.imageUrl) return;
+        if (!newTopic.name || !newTopic.imageUrl) {
+            console.error("Missing topic name or image URL.");
+            return;
+        }
     
         try {
             const response = await fetch("/api/add-topic", {
@@ -98,10 +101,19 @@ export default function VideosPage() {
                 })
             });
     
-            if (!response.ok) throw new Error("Failed to add topic");
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(`Failed to add topic: ${errorMessage}`);
+            }
     
-            const createdTopic = await response.json();
-            setTopics([...Topics, createdTopic]); // Update UI with new topic
+            const createdTopic = await response.json().catch(() => null);
+            if (!createdTopic || !createdTopic.id) {
+                throw new Error("Invalid topic data received");
+            }
+    
+            // Ensure Topics is an array before updating
+            const updatedTopics = [...(Topics ?? []), createdTopic];
+            setTopics(updatedTopics);
     
             // Reset form
             setNewTopic({ name: "", imageUrl: "" });
@@ -109,7 +121,7 @@ export default function VideosPage() {
         } catch (error) {
             console.error("Error adding topic:", error);
         }
-    };
+    };    
     
     const handleAddSubtopic = async () => {
         if (!newSubtopic.name || !newSubtopic.videoUrl || !selectedTopic) return;
@@ -130,7 +142,7 @@ export default function VideosPage() {
     
             if (!subtopicResponse.ok) throw new Error("Failed to add subtopic");
     
-            const createdSubtopic = await subtopicResponse.json();
+            let createdSubtopic = await subtopicResponse.json();
     
             // Add associated video
             const videoResponse = await fetch("/api/add-video", {
@@ -148,6 +160,11 @@ export default function VideosPage() {
     
             if (!videoResponse.ok) throw new Error("Failed to add video");
     
+            const createdVideo = await videoResponse.json();
+    
+            // Ensure subtopic has a videos array and add the new video
+            createdSubtopic = { ...createdSubtopic, videos: [createdVideo] };
+    
             // Update UI with new subtopic
             const updatedTopics = Topics.map(topic =>
                 topic.id === selectedTopic
@@ -162,17 +179,18 @@ export default function VideosPage() {
             console.error("Error adding subtopic/video:", error);
         }
     };    
+        
     
     const getSubtopicsForTopic = (topicId: number) => {
         const topic = Topics.find(t => t.id === topicId);
-        return topic ? topic.subtopics : [];
+        return topic?.subtopics ?? [];  // Always return an array
     };
     
     const getVideoForSubtopic = (subtopicId: number) => {
-        for (const topic of Topics) {
-            for (const subtopic of topic.subtopics) {
+        for (const topic of Topics ?? []) {  // Ensure Topics is always an array
+            for (const subtopic of topic.subtopics ?? []) {  // Ensure subtopics is always an array
                 if (subtopic.id === subtopicId) {
-                    return subtopic.videos.length > 0 ? subtopic.videos[0] : null;
+                    return subtopic.videos?.length > 0 ? subtopic.videos[0] : null;
                 }
             }
         }
