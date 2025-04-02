@@ -123,7 +123,11 @@ export default function LearningPage() {
                 </button>
                 <button
                   className="w-full flex items-center gap-2 px-4 py-3 hover:bg-zinc-100 transition"
-                  onClick={() => router.push("/")}
+                  onClick={() => {
+                    localStorage.removeItem("chatMessages"); // Clear chat history
+                    localStorage.setItem("signOut", "true"); // Mark sign out event
+                    router.push("/");
+                  }}
                 >
                   <LogOut className="w-5 h-5" /> Sign Out
                 </button>
