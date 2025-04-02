@@ -46,5 +46,15 @@
   },
   "scripts": {
     "test": "jest"
-  }
+  },
+  "jest": {
+  "reporters": [
+    "default",
+    ["jest-junit", {
+      "outputDirectory": "./test-results",
+      "outputName": "jest-test-results.xml"
+    }]
+  ]
+}
+
 }
