@@ -44,17 +44,4 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3"
   },
-  "scripts": {
-    "test": "jest"
-  },
-  "jest": {
-  "reporters": [
-    "default",
-    ["jest-junit", {
-      "outputDirectory": "./test-results",
-      "outputName": "jest-test-results.xml"
-    }]
-  ]
-}
-
 }
