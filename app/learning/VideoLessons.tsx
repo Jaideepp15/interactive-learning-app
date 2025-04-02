@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import FloatingChatButton from "./floatingchatbutton";
 
 interface Video {
   id: number;
@@ -187,6 +188,8 @@ export default function VideoLessons() {
           ))}
         </div>
       )}
+      {/* AI Chatbot Floating Button */}
+      <FloatingChatButton />
     </div>
   );
 }
