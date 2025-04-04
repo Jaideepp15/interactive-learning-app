@@ -14,17 +14,17 @@ pipeline {
 
     stage('Install Dependencies') {
       steps {
-        sh 'npm install' // or 'pip install -r requirements.txt' for Python
+        bat 'npm install'  // Use 'bat' instead of 'sh' for Windows
       }
     }
 
     stage('Run Unit Tests') {
       steps {
-        sh 'npm test' // or 'python -m unittest discover' for Python
+        bat 'npm test'  // Use 'bat' instead of 'sh' for Windows
       }
       post {
         always {
-          junit 'junit.xml' // Ensure your test framework generates JUnit-compatible reports
+          junit 'junit.xml'  // Ensure your test framework generates JUnit-compatible reports
         }
       }
     }
