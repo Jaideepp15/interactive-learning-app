@@ -3,11 +3,22 @@ export default {
     testEnvironment: 'jsdom',
     moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
     transform: {
-      '^.+\\.jsx?$': 'babel-jest', // Transform .js and .jsx files
-      '^.+\\.tsx?$': 'ts-jest', // Transform .ts and .tsx files
+      '^.+\\.jsx?$': 'babel-jest',
+      '^.+\\.tsx?$': 'ts-jest',
     },
     transformIgnorePatterns: [
-        "/node_modules/(?!lucide-react)" // Allow transformation of lucide-react
-      ],
-  };
+        "/node_modules/(?!lucide-react)"
+    ],
+    reporters: [
+      "default",
+      ["jest-junit", {
+        outputDirectory: "./",
+        outputName: "junit.xml",
+        classNameTemplate: "{classname}",
+        titleTemplate: "{title}",
+        ancestorSeparator: " › ",
+        usePathForSuiteName: true
+      }]
+    ]
+};
 
