@@ -3,6 +3,8 @@ pipeline {
 
   environment {
     NODE_ENV = 'test'
+    JEST_JUNIT_OUTPUT_DIR = './'
+    JEST_JUNIT_OUTPUT_NAME = 'junit.xml'
   }
 
   stages {
@@ -14,17 +16,18 @@ pipeline {
 
     stage('Install Dependencies') {
       steps {
-        bat 'npm install'  // Use 'bat' instead of 'sh' for Windows
+        bat 'npm install'
+        bat 'npm install --save-dev jest-junit'
       }
     }
 
     stage('Run Unit Tests') {
       steps {
-        bat 'npm test'  // Use 'bat' instead of 'sh' for Windows
+        bat 'npm test -- --ci --reporters=default --reporters=jest-junit'
       }
       post {
         always {
-          junit 'junit.xml'  // Ensure your test framework generates JUnit-compatible reports
+          junit testResults: 'junit.xml', allowEmptyResults: true
         }
       }
     }
